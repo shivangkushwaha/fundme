@@ -4,7 +4,7 @@ import "./PriceConverter.sol";
 
 error notOwner();
 
-contract fundMe {
+contract FundMe {
     uint256 public constant MINIMUM_USD = 50 * 1e18;
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunder;
