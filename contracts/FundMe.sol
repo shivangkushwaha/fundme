@@ -1,27 +1,60 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 import "./PriceConverter.sol";
+// Error Codes
+error FundMe_notOwner();
 
-error notOwner();
+//Interfaces Lib
+// Contract
 
+/** @title A COntract For crowd funding
+ * @author Shivang Kushwaha
+ * @notice This contract is demon
+ * @dev This implements price feeds as our library
+ */
 contract FundMe {
+    // type declartion
+    using PriceConverter for uint256;
+    // state Variable
     uint256 public constant MINIMUM_USD = 50 * 1e18;
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunder;
-    using PriceConverter for uint256;
     address public immutable i_owner;
     AggregatorV3Interface public priceFeed;
 
+    //Modifier
+    // Declaring modifire for sending all Data with Only modifire
+    modifier onlyowner() {
+        // require(msg.sender==i_owner,"You are not authrized to take this action.");
+        if (msg.sender != i_owner) {
+            revert FundMe_notOwner();
+        }
+        _;
+    }
+
+    // contructor
     constructor(address priceFeedAddress) {
         i_owner = msg.sender;
         priceFeed = AggregatorV3Interface(priceFeedAddress);
+    }
+
+    /**
+     * @notice The Function Fund This Contract
+     * @dev Accepts Money
+     */
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
     }
 
     function fund() public payable {
         require(
             msg.value.getConversionRate(priceFeed) > MINIMUM_USD,
             "You are not eligible yet for donate minimum amount of fund...."
-        ); //1e18 = 1 * 10 **18
+        );
         funders.push(msg.sender);
         addressToAmountFunder[msg.sender] = msg.value;
     }
@@ -44,23 +77,5 @@ contract FundMe {
             value: address(this).balance
         }("");
         require(callsucess, "Transfer Failed......");
-    }
-
-    // Declaring modifire for sending all Data with Only modifire
-    modifier onlyowner() {
-        // require(msg.sender==i_owner,"You are not authrized to take this action.");
-        if (msg.sender != i_owner) {
-            revert notOwner();
-        }
-        _;
-    }
-
-    // what happens if someone sends this contract eths witout calling fund function.
-    receive() external payable {
-        fund();
-    }
-
-    fallback() external payable {
-        fund();
     }
 }

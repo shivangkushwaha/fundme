@@ -8,14 +8,14 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const chainId = network.config.chainId
     let ethUSDPriceFeeAddress;
     console.log("Network_name", network.name)
-    const fundMe = await deploy("FundMe", {
-        from: deployer,
-        args: [ethUSDPriceFeeAddress],
-        log: true,
-        waitConformations: BLOCKCONFORMATION
-    })
-    if (!developmentChain.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
-        //verify contract in chain 
-        await verify(fundMe.address, [etherUsdAgreegator])
-    }
+    // const fundMe = await deploy("FundMe", {
+    //     from: deployer,
+    //     args: [ethUSDPriceFeeAddress],
+    //     log: true,
+    //     waitConformations: BLOCKCONFORMATION
+    // })
+    // if (!developmentChain.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+    //     //verify contract in chain 
+    //     await verify(fundMe.address, [etherUsdAgreegator])
+    // }
 }

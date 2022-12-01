@@ -2,6 +2,8 @@
 
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-solhint");
+require("@nomiclabs/hardhat-ethers");
+require("hardhat-deploy-ethers");
 require("@nomiclabs/hardhat-etherscan");
 require('hardhat-gas-reporter')
 require('dotenv').config()
