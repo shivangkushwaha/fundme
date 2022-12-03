@@ -6,7 +6,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
     let ethUSDPriceFeeAddress;
-    console.log("Network_name", network.name)
+    console.log("********* Deploying mock for", network.name, "Network *************")
     if (developmentChain.includes(network.name)) {
         log("Local Network Detected! Deploying our smart Contract On it ----------")
         await deploy("MockV3Aggregator", {
