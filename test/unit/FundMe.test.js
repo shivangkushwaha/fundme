@@ -18,7 +18,7 @@ describe("*************** FundMe Contract testing ************** ", async () => 
 
         // Testign Constructor of contract -----
         it("Set the aggregator correctly", async () => {
-            const response = await fundMe.s_priceFeed();
+            const response = await fundMe.getPriceFeed();
             assert.equal(response, mockV3Aggregator.address)
         })
     })
@@ -34,14 +34,14 @@ describe("*************** FundMe Contract testing ************** ", async () => 
         //case 2  
         it("Updates The Amount funded data Structure", async () => {
             await fundMe.fund({ value: sendValue })
-            const response = await fundMe.s_addressToAmountFunder(deployer)
+            const response = await fundMe.getAdressToAmountFunded(deployer)
             assert.equal(response.toString(), sendValue.toString())
         })
 
         //Case 3 
         it("Add Funders to funders Array", async () => {
             await fundMe.fund({ value: sendValue })
-            const response = await fundMe.s_funders(0)
+            const response = await fundMe.getFunder(0)
             assert.equal(response, deployer)
         })
 
@@ -108,10 +108,10 @@ describe("*************** FundMe Contract testing ************** ", async () => 
 
                 // check funders array is reseted to inital position after withdraw all amount from my contract ---
 
-                await expect(fundMe.s_funders(0)).to.be.reverted
+                await expect(fundMe.getFunder(0)).to.be.reverted
                 // Checking all mappings are updated correctly -------
                 for (const account of accounts) {
-                    assert.equal(await fundMe.s_addressToAmountFunder(account.address), 0)
+                    assert.equal(await fundMe.getAdressToAmountFunded(account.address), 0)
                 }
             }
         })
@@ -186,10 +186,10 @@ describe("*************** FundMe Contract testing ************** ", async () => 
 
                 // check funders array is reseted to inital position after withdraw all amount from my contract ---
 
-                await expect(fundMe.s_funders(0)).to.be.reverted
+                await expect(fundMe.getFunder(0)).to.be.reverted
                 // Checking all mappings are updated correctly -------
                 for (const account of accounts) {
-                    assert.equal(await fundMe.s_addressToAmountFunder(account.address), 0)
+                    assert.equal(await fundMe.getAdressToAmountFunded(account.address), 0)
                 }
             }
         })

@@ -18,9 +18,9 @@ contract FundMe {
     // state Variable
     uint256 public constant MINIMUM_USD = 50 * 1e18;
     address[] public s_funders;
-    mapping(address => uint256) public s_addressToAmountFunder;
-    address public immutable i_owner;
-    AggregatorV3Interface public s_priceFeed;
+    mapping(address => uint256) private s_addressToAmountFunder;
+    address private immutable i_owner;
+    AggregatorV3Interface private s_priceFeed;
 
     //Modifier
     // Declaring modifire for sending all Data with Only modifire
@@ -91,5 +91,23 @@ contract FundMe {
             value: address(this).balance
         }("");
         require(callsucess, "Transfer Failed......");
+    }
+
+    function getOwner() public view returns (address) {
+        return i_owner;
+    }
+
+    function getFunder(uint index) public view returns (address) {
+        return s_funders[index];
+    }
+
+    function getAdressToAmountFunded(
+        address funder
+    ) public view returns (uint256) {
+        return s_addressToAmountFunder[funder];
+    }
+
+    function getPriceFeed() public view returns (AggregatorV3Interface) {
+        return s_priceFeed;
     }
 }
