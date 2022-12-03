@@ -4,14 +4,16 @@
   "description": "For Funding Contract with hardhat",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run:node": "npx hardhat node",
+    "coverage": "npx hardhat coverage"
   },
   "repository": {
     "type": "git",
     "url": "git+https://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@github.com/shivangkushwaha/fundme.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "shivang Kushwaha",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/shivangkushwaha/fundme/issues"
