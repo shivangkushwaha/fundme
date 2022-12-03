@@ -17,10 +17,10 @@ contract FundMe {
     using PriceConverter for uint256;
     // state Variable
     uint256 public constant MINIMUM_USD = 50 * 1e18;
-    address[] public funders;
-    mapping(address => uint256) public addressToAmountFunder;
+    address[] public s_funders;
+    mapping(address => uint256) public s_addressToAmountFunder;
     address public immutable i_owner;
-    AggregatorV3Interface public priceFeed;
+    AggregatorV3Interface public s_priceFeed;
 
     //Modifier
     // Declaring modifire for sending all Data with Only modifire
@@ -35,7 +35,7 @@ contract FundMe {
     // contructor
     constructor(address priceFeedAddress) {
         i_owner = msg.sender;
-        priceFeed = AggregatorV3Interface(priceFeedAddress);
+        s_priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
     /**
@@ -52,20 +52,20 @@ contract FundMe {
 
     function fund() public payable {
         require(
-            msg.value.getConversionRate(priceFeed) > MINIMUM_USD,
+            msg.value.getConversionRate(s_priceFeed) > MINIMUM_USD,
             "You are not eligible yet for donate minimum amount of fund...."
         );
-        funders.push(msg.sender);
-        addressToAmountFunder[msg.sender] = msg.value;
+        s_funders.push(msg.sender);
+        s_addressToAmountFunder[msg.sender] = msg.value;
     }
 
     function widraw() public onlyowner {
-        for (uint256 i = 0; i < funders.length; i = i + 1) {
-            // Reset all Funders Array Valu or Array---------------
-            addressToAmountFunder[funders[i]] = 0;
+        for (uint256 i = 0; i < s_funders.length; i = i + 1) {
+            // Reset all s_funders Array Valu or Array---------------
+            s_addressToAmountFunder[s_funders[i]] = 0;
         }
         // Reset array---------------------
-        funders = new address[](0);
+        s_funders = new address[](0);
         // transfer Method
         // change msg.sender to payblre type
         payable(msg.sender).transfer(address(this).balance);
@@ -73,6 +73,20 @@ contract FundMe {
         bool sucess = payable(msg.sender).send(address(this).balance);
         require(sucess, "Transfer Failed......");
         // call function
+        (bool callsucess, ) = payable(msg.sender).call{
+            value: address(this).balance
+        }("");
+        require(callsucess, "Transfer Failed......");
+    }
+
+    function cheparWithdraw() public payable onlyowner {
+        address[] memory m_funders = s_funders;
+
+        for (uint256 i = 0; i < m_funders.length; i = i + 1) {
+            // Reset all s_funders Array Valu or Array---------------
+            s_addressToAmountFunder[m_funders[i]] = 0;
+        }
+        s_funders = new address[](0);
         (bool callsucess, ) = payable(msg.sender).call{
             value: address(this).balance
         }("");

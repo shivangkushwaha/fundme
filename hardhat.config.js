@@ -40,11 +40,12 @@ module.exports = {
     }
   },
   gasReporter: {
-    enabled: false,
+    enabled: true,
     outputFile: "gas-report.txt",
     noColors: true,
     currency: "USD",
-    coinmarketca: COIN_MARKET_CAP_API_KEY
+    coinmarketcap: COIN_MARKET_CAP_API_KEY,
+    token: "ETH"
   },
   namedAccounts: {
     deployer: 0
